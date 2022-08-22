@@ -1,4 +1,4 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, Query } from "@nestjs/common";
 
 import { WebSitesDataService } from "./websites.data.service";
 import { WebsitesData } from "./websites.data.entity";
@@ -8,7 +8,11 @@ export class WebSitesDataController {
     constructor(private websitesDataService: WebSitesDataService) { }
 
     @Get()
-    async findAll(): Promise<WebsitesData> {
-        return await this.websitesDataService.getScrapedData();
+    async findAll(
+        @Query('limit') limit: number,
+        @Query('offset') offset: number,
+        @Query('show_all') show_all: boolean,
+        ): Promise<{ data: WebsitesData[]; count: number; }> {
+        return await this.websitesDataService.getScrapedData(limit, offset, show_all);
     }
 }

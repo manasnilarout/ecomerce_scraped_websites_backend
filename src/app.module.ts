@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { ServeStaticModule } from '@nestjs/serve-static';
+
+import { join } from 'path';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -9,6 +12,10 @@ import { WebSitesDataModule } from './scraped_data/websites.data.module';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      exclude: ['/api*'],
+    }),
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -20,9 +27,9 @@ import { WebSitesDataModule } from './scraped_data/websites.data.module';
       entities: [WebsitesData],
       synchronize: false,
     }),
+    WebSitesDataModule,
   ],
   controllers: [AppController],
   providers: [AppService],
-  WebSitesDataModule
 })
 export class AppModule { }
