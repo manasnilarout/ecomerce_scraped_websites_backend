@@ -8,7 +8,7 @@ $(document).ready(function () {
         bInfo: true,
         sPaginationType: 'full_numbers',
         pagingType: 'full_numbers',
-        ajax: 'http://localhost:3000/api/v1/websites_data',
+        ajax: 'http://0.0.0.0:3000/api/v1/websites_data',
         columns: [
             { data: 'uri' },
             { data: 'baseLabel' },
