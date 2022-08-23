@@ -9,10 +9,10 @@ export class WebSitesDataController {
 
     @Get()
     async findAll(
-        @Query('limit') limit: number,
-        @Query('offset') offset: number,
+        @Query('length') limit: number,
+        @Query('start') offset: number,
         @Query('show_all') show_all: boolean,
-        ): Promise<{ data: WebsitesData[]; count: number; }> {
+        ): Promise<{ data: WebsitesData[]; recordsTotal: number; recordsFiltered: number; }> {
         return await this.websitesDataService.getScrapedData(limit, offset, show_all);
     }
 }

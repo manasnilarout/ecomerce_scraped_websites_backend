@@ -10,11 +10,11 @@ export class WebSitesDataService {
         private webSitesDataRepository: Repository<WebsitesData>,
     ) { }
 
-    public async getScrapedData(limit: number = 30, offset: number = 0, show_all: boolean = false): Promise<{ data: WebsitesData[]; count: number; }> {
+    public async getScrapedData(limit: number = 30, offset: number = 0, show_all: boolean = false): Promise<{ data: WebsitesData[]; recordsTotal: number; recordsFiltered: number; }> {
         try {
             const defaultFields: (keyof WebsitesData)[] = ['id', 'uri', 'title', 'eCommerceType', 'buildNo', 'companyId', 'baseLabel', 'dateLabel', 'version'];
             const result = await this.webSitesDataRepository.findAndCount({ take: limit, skip: offset, select: show_all ? null : defaultFields });
-            return { data: result[0], count: result[1] }
+            return { data: result[0], recordsTotal: result[1], recordsFiltered: result[0] && Array.isArray(result[0]) && result[0].length }
         } catch (err) {
             throw new InternalServerErrorException('Something went wrong while fetching scraped data.');
         }
