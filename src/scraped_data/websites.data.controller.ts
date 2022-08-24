@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from "@nestjs/common";
+import { Controller, Get, Param, Query } from "@nestjs/common";
 
 import { WebSitesDataService } from "./websites.data.service";
 import { WebsitesData } from "./websites.data.entity";
@@ -14,5 +14,10 @@ export class WebSitesDataController {
         @Query('show_all') show_all: boolean,
         ): Promise<{ data: WebsitesData[]; recordsTotal: number; recordsFiltered: number; }> {
         return await this.websitesDataService.getScrapedData(limit, offset, show_all);
+    }
+
+    @Get(':id')
+    public async getById(@Param('id')  id: number): Promise<WebsitesData> {
+        return await this.websitesDataService.getById(id);
     }
 }
