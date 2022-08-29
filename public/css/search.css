@@ -1,0 +1,35 @@
+#form {
+    width: 40%;
+    margin-top: 5vh;
+    margin-left: 30%;
+}
+
+#results {
+    width: 66%;
+    margin-top: 5vh;
+    margin-left: 17%;
+}
+
+#loader {
+    margin-left: 48.5%;
+    margin-top: 5vh;
+}
+
+@media only screen and (max-width: 600px) {
+    #form {
+        width: 80%;
+        margin-top: 3vh;
+        margin-left: 10%;
+    }
+
+    #results {
+        width: 80%;
+        margin-top: 3vh;
+        margin-left: 10%;
+    }
+
+    #loader {
+        margin-left: 42%;
+        margin-top: 5vh;
+    }
+}
