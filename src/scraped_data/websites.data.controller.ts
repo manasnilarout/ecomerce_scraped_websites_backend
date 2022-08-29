@@ -12,12 +12,20 @@ export class WebSitesDataController {
         @Query('length') limit: number,
         @Query('start') offset: number,
         @Query('show_all') show_all: boolean,
-        ): Promise<{ data: WebsitesData[]; recordsTotal: number; recordsFiltered: number; }> {
+    ): Promise<{ data: WebsitesData[]; recordsTotal: number; recordsFiltered: number; }> {
         return await this.websitesDataService.getScrapedData(limit, offset, show_all);
     }
 
-    @Get(':id')
-    public async getById(@Param('id')  id: number): Promise<WebsitesData> {
+    @Get('search')
+    public async search(
+        @Query('domain') domain: string,
+        @Query('companyId') companyId: string,
+    ): Promise<WebsitesData[]> {
+        return await this.websitesDataService.search({ domain, companyId });
+    }
+
+    @Get(':id(\\d+)')
+    public async getById(@Param('id') id: number): Promise<WebsitesData> {
         return await this.websitesDataService.getById(id);
     }
 }
