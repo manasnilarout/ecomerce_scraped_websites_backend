@@ -94,4 +94,10 @@ export class WebsitesData {
 
     @Column({ name: 'url_input' })
     urlInput: string;
+
+    @Column({ name: 'date_scraped', type: 'date' })
+    dateScraped: string;
+
+    @Column({ name: 'source' })
+    source: string;
 }

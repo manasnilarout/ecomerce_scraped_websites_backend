@@ -92,6 +92,8 @@ export class WebSitesDataService {
             websiteRawRecord.cNameTestUrl = this.getDataFromImportGroupFieldArray(pageData.cNameTestWithUrl);
             websiteRawRecord.screenCapture = extractorData.data[0].screenCapture;
             websiteRawRecord.urlInput = extractorData.url;
+            websiteRawRecord.source = 'External';
+            websiteRawRecord.dateScraped = new Date().toISOString().split('T')[0];
 
             return await this.webSitesDataRepository.save(websiteRawRecord);
         }
