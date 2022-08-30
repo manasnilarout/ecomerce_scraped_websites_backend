@@ -16,7 +16,19 @@ function main() {
                 console.log(data);
                 writeResults(data);
             }
-        });
+        })
+            .fail(() => {
+                console.log('Falling back to live query.');
+                $.get({
+                    url: url + '&live=true',
+                    processData: false,
+                    contentType: false,
+                    success: (data) => {
+                        console.log(data);
+                        writeResults(data);
+                    }
+                })
+            });
     });
 }
 

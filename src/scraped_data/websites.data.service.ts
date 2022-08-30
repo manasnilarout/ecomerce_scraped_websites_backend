@@ -95,7 +95,7 @@ export class WebSitesDataService {
             websiteRawRecord.source = 'External';
             websiteRawRecord.dateScraped = new Date().toISOString().split('T')[0];
 
-            return await this.webSitesDataRepository.save(websiteRawRecord);
+            return this.processData(await this.webSitesDataRepository.save(websiteRawRecord));
         }
 
         throw new InternalServerErrorException('Something went wrong while scraping data from import.');
