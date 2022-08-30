@@ -20,8 +20,14 @@ export class WebSitesDataController {
     public async search(
         @Query('domain') domain: string,
         @Query('companyId') companyId: string,
+        @Query('live') live: boolean,
     ): Promise<WebsitesData[]> {
-        return await this.websitesDataService.search({ domain, companyId });
+        return await this.websitesDataService.search({ domain, companyId }, live);
+    }
+
+    @Get('search/live')
+    public async searchLive(@Query('domain') domain: string): Promise<WebsitesData[]> {
+        return await this.websitesDataService.getDataFromImport(domain);
     }
 
     @Get(':id(\\d+)')
