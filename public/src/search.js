@@ -1,5 +1,3 @@
-const HOST = 'http://localhost:4040';
-
 function main() {
     $('#form').submit(function (e) {
         e.preventDefault();
@@ -55,7 +53,7 @@ function writeResults(results) {
             const ifr = document.createElement('iframe');
             let html = '';
             if (['backgroundRequests', 'cookies'].includes(k)) {
-                const requestLists = results[0][k].split(';').map(r => `<li>${r.replace('[status', ' -> [status')}</li>`);
+                const requestLists = results[0][k] && results[0][k].split(';').map(r => `<li>${r.replace('[status', ' -> [status')}</li>`);
                 html = `<ul>${requestLists.join('\n')}</ul>`;
             } else {
                 html = results[0][k];

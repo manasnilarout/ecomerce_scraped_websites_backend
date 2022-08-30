@@ -90,6 +90,7 @@ export class WebSitesDataService {
             websiteRawRecord.governance = this.getDataFromImportGroupFieldArray(pageData.Governance);
             websiteRawRecord.isCnameMapped = this.getDataFromImportGroupFieldArray(pageData.isCNameProperlyMapped);
             websiteRawRecord.cNameTestUrl = this.getDataFromImportGroupFieldArray(pageData.cNameTestWithUrl);
+            websiteRawRecord.screenCapture = extractorData.data[0].screenCapture;
             websiteRawRecord.urlInput = extractorData.url;
 
             return await this.webSitesDataRepository.save(websiteRawRecord);
