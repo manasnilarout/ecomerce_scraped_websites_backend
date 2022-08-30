@@ -54,7 +54,7 @@ function writeResults(results) {
             let html = '';
             if (['backgroundRequests', 'cookies'].includes(k)) {
                 const requestLists = results[0][k] && results[0][k].split(';').map(r => `<li>${r.replace('[status', ' -> [status')}</li>`);
-                html = `<ul>${requestLists.join('\n')}</ul>`;
+                html = `<ul>${(requestLists || []).join('\n')}</ul>`;
             } else {
                 html = results[0][k];
             }

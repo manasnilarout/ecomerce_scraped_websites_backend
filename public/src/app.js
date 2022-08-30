@@ -19,8 +19,8 @@ const buildTableFromWebsiteJsonData = (websiteData) => {
             const ifr = document.createElement('iframe');
             let html = '';
             if (['backgroundRequests', 'cookies'].includes(k)) {
-                const requestLists = websiteData[k].split(';').map(r => `<li>${r.replace('[status', ' -> [status')}</li>`);
-                html = `<ul>${requestLists.join('\n')}</ul>`;
+                const requestLists = websiteData[k] && websiteData[k].split(';').map(r => `<li>${r.replace('[status', ' -> [status')}</li>`);
+                html = `<ul>${(requestLists || []).join('\n')}</ul>`;
             } else {
                 html = websiteData[k];
             }
