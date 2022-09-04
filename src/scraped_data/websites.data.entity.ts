@@ -100,4 +100,16 @@ export class WebsitesData {
 
     @Column({ name: 'source' })
     source: string;
+
+    @Column({ name: 'is_robots_page_present' })
+    isRobotsPagePresent: string;
+
+    @Column({ name: 'is_sitemap_link_present_in_robots_page' })
+    isSitemapLinkPresentInRobotsPage: string;
+
+    @Column({ name: 'sitemap_link' })
+    sitemapLink: string;
+
+    @Column({ name: 'is_sitemap_link_functional' })
+    isSitemapLinkFunctional: string;
 }

@@ -1,0 +1,24 @@
+doctype html
+head
+    meta(charset='utf-8')
+    title Website data
+
+body
+    strong SuiteCommerce details for domain #{domain}
+    br
+    br
+    br
+    br
+    br
+    table 
+        each entry in entries
+            tr
+                each val, key in entry
+                    if key === 0
+                        td
+                            strong= val
+                    else if (['divIdMain', 'divClassMain', 'backgroundRequests'].includes(val))
+                        td
+                            iframe(srcdoc=val)
+                    else
+                        td= val
