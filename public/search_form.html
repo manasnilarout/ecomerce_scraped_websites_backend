@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search SuiteCommerce Domain</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/searchForm.css" />
+</head>
+
+<body>
+    <form class="md-form border border-dark p-5 file-uploader" id="form">
+        <div class="form-group">
+            <label for="userEmail">Email</label>
+            <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp"
+                placeholder="Please enter email">
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <div class="form-group">
+            <label for="userName">Name</label>
+            <input type="text" class="form-control" id="userName" placeholder="Name">
+        </div>
+        <div class="form-group">
+            <label for="domain">Domain</label>
+            <input type="text" class="form-control" id="domain" placeholder="SuiteCommerce domain">
+        </div>
+        <!-- <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="isLiveQuery">
+            <label class="form-check-label" for="isLiveQuery">Is live query?</label>
+        </div> -->
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <div id="loader" class="spinner-grow" style="display: none;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+
+    <div id="results" style="display: none;" class="table-responsive">
+        <table id="resultsTable" class="table table-striped table-bordered table-hover"></table>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="./src/searchForm.js"></script>
+</body>
+
+</html>

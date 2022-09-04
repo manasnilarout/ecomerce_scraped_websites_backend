@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 
 import { WebsitesData } from './websites.data.entity';
 import { ExtractorData, GroupEntity, GroupEntityField, ImportIoReponse } from './interfaces/ImportIoResponse';
+import { SearchWebsiteRequest } from './interfaces/SearchWebsiteRequest';
+import config from '../config';
 
 @Injectable()
 export class WebSitesDataService {
@@ -129,7 +131,7 @@ export class WebSitesDataService {
         }
     }
 
-    public async search({ domain, companyId }: { domain: string, companyId: string }, isLiveQuery: boolean = false)
+    public async search({ domain, companyId }: { domain: string, companyId?: string }, isLiveQuery: boolean = false)
         : Promise<WebsitesData[]> {
         try {
             this.logger.log(`Attempting to search with "${companyId || domain}" in DB`);
@@ -184,5 +186,32 @@ export class WebSitesDataService {
         }
 
         return tempwebsiteDataObj;
+    }
+
+    public async searchForDomainAndStoreUserDetails(requestBody: SearchWebsiteRequest): Promise<WebsitesData[]> {
+        try {
+            await this.storeSearchDetailsInSheet(requestBody);
+            return await this.search({ domain: requestBody.domain }, true);
+        } catch (err) {
+            this.logger.error('Hmm, what happened here with the search!', err);
+            if (err instanceof HttpException) {
+                throw err;
+            }
+            throw new InternalServerErrorException('Something went wrong while fetching data for record with given details.', err);
+        }
+    }
+
+    private async storeSearchDetailsInSheet(requestBody: SearchWebsiteRequest): Promise<void> {
+        try {
+            this.logger.log(`Storing request details in google sheet.`);
+            await this.httpService.post(
+                `${config.CE_BASE_URL}/spreadsheets/${process.env.SPREADSHEET_ID}/worksheets/${config.CE_SHEET_NAME}/multiples`,
+                { majorDimension: 'ROWS', values: [Object.values(requestBody)] },
+                { headers: { Authorization: process.env.CE_AUTH_KEY } }
+            ).toPromise();
+        } catch (err) {
+            this.logger.error(`Something went wrong while storing search details in G-Sheet.`, err);
+            throw new InternalServerErrorException(`Something went wrong while storing search details in G-Sheet.`, err);
+        }
     }
 }

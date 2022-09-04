@@ -1,4 +1,4 @@
-import { Controller, Get, Header, Param, Query } from "@nestjs/common";
+import { Body, Controller, Get, Header, Param, Post, Query } from "@nestjs/common";
 
 import { WebSitesDataService } from "./websites.data.service";
 import { WebsitesData } from "./websites.data.entity";
@@ -61,5 +61,15 @@ export class WebSitesDataController {
     @Get(':id(\\d+)')
     public async getById(@Param('id') id: number): Promise<WebsitesData> {
         return await this.websitesDataService.getById(id);
+    }
+
+    @Post('search/form')
+    public async searchForDomainAndStoreUserDetails(
+        @Body('userName') userName: string,
+        @Body('userEmail') userEmail: string,
+        @Body('domain') domain: string,
+        @Body('queryLive') queryLive?: boolean,
+    ): Promise<WebsitesData[]> {
+        return await this.websitesDataService.searchForDomainAndStoreUserDetails({ userName, userEmail, domain, queryLive });
     }
 }

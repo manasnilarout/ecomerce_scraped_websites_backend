@@ -3,113 +3,113 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('websites_data')
 export class WebsitesData {
     @PrimaryGeneratedColumn()
-    id: number;
+    public id: number;
 
-    @Column()
-    uri: string;
+    @Column({ name: 'uri' })
+    public uri: string;
 
     @Column({ name: 'suitecommerce_tag' })
-    suiteCommerceTag: string;
+    public suiteCommerceTag: string;
 
     @Column({ name: 'prodbundle_id' })
-    prodBundleId: string;
+    public prodBundleId: string;
 
     @Column({ name: 'base_label' })
-    baseLabel: string;
+    public baseLabel: string;
 
     @Column({ name: 'version' })
-    version: string;
+    public version: string;
 
     @Column({ name: 'date_label' })
-    dateLabel: string;
+    public dateLabel: string;
 
     @Column({ name: 'build_no' })
-    buildNo: string;
+    public buildNo: string;
 
     @Column({ name: 'company_id' })
-    companyId: string;
+    public companyId: string;
 
     @Column({ name: 'application_ld_json' })
-    applicationLdJson: string;
+    public applicationLdJson: string;
 
     @Column({ name: 'div_id_main' })
-    divIdMain: string;
+    public divIdMain: string;
 
     @Column({ name: 'div_class_main' })
-    divClassMain: string;
+    public divClassMain: string;
 
     @Column({ name: 'cookies' })
-    cookies: string;
+    public cookies: string;
 
     @Column({ name: 'canonical_url' })
-    canonicalUrl: string;
+    public canonicalUrl: string;
 
     @Column({ name: 'title' })
-    title: string;
+    public title: string;
 
     @Column({ name: 'seo_generator' })
-    seoGenerator: string;
+    public seoGenerator: string;
 
     @Column({ name: 'got_response_from_pre_render' })
-    gotResponseFromPreRender: string;
+    public gotResponseFromPreRender: string;
 
     @Column({ name: 'governance' })
-    governance: string;
+    public governance: string;
 
     @Column({ name: 'perftiming' })
-    perfTiming: string;
+    public perfTiming: string;
 
     @Column({ name: 'perftiming_sqltime' })
-    perfTimingSqlTime: string;
+    public perfTimingSqlTime: string;
 
     @Column({ name: 'search_request_details' })
-    searchRequestDetails: string;
+    public searchRequestDetails: string;
 
     @Column({ name: 'ssp_app_context' })
-    SSPAppContext: string;
+    public SSPAppContext: string;
 
     @Column({ name: 'e_commerce_type' })
-    eCommerceType: string;
+    public eCommerceType: string;
 
     @Column({ name: 'sub_request_status' })
-    subRequestStatus: string;
+    public subRequestStatus: string;
 
     @Column({ name: 'background_requests' })
-    backgroundRequests: string;
+    public backgroundRequests: string;
 
     @Column({ name: 'console_content' })
-    consoleContent: string;
+    public consoleContent: string;
 
     @Column({ name: 'is_cname_mapped' })
-    isCnameMapped: string;
+    public isCnameMapped: string;
 
     @Column({ name: 'cname_test_url' })
-    cNameTestUrl: string;
+    public cNameTestUrl: string;
 
     @Column({ name: 'is_https' })
-    isHttps: string;
+    public isHttps: string;
 
     @Column({ name: 'screen_capture' })
-    screenCapture: string;
+    public screenCapture: string;
 
     @Column({ name: 'url_input' })
-    urlInput: string;
+    public urlInput: string;
 
     @Column({ name: 'date_scraped', type: 'date' })
     dateScraped: string;
 
     @Column({ name: 'source' })
-    source: string;
+    public source: string;
 
     @Column({ name: 'is_robots_page_present' })
-    isRobotsPagePresent: string;
+    public isRobotsPagePresent: string;
 
     @Column({ name: 'is_sitemap_link_present_in_robots_page' })
-    isSitemapLinkPresentInRobotsPage: string;
+    public isSitemapLinkPresentInRobotsPage: string;
 
     @Column({ name: 'sitemap_link' })
-    sitemapLink: string;
+    public sitemapLink: string;
 
     @Column({ name: 'is_sitemap_link_functional' })
-    isSitemapLinkFunctional: string;
+    public isSitemapLinkFunctional: string;
 }

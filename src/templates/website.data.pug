@@ -2,23 +2,21 @@ doctype html
 head
     meta(charset='utf-8')
     title Website data
-
+    link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css')
 body
     strong SuiteCommerce details for domain #{domain}
     br
     br
-    br
-    br
-    br
-    table 
-        each entry in entries
-            tr
-                each val, key in entry
-                    if key === 0
-                        td
-                            strong= val
-                    else if (['divIdMain', 'divClassMain', 'backgroundRequests'].includes(val))
-                        td
-                            iframe(srcdoc=val)
-                    else
-                        td= val
+    div(id='results' class='table-responsive' style="width:66%;margin-top:5vh;margin-left:17%")
+        table(class='table table-striped table-bordered table-hover')
+            each entry in entries
+                tr(style="width:100%")
+                    each val, key in entry
+                        if key === 0
+                            td(style="width:24%")
+                                strong= val
+                        else if (['divIdMain', 'divClassMain', 'backgroundRequests'].includes(val))
+                            td(style="width:24%")
+                                iframe(srcdoc=val)
+                        else
+                            td(style="width:74%")= val

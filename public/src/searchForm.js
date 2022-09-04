@@ -6,29 +6,28 @@ function main() {
         loader.style = 'display: block; width: 4rem; height: 4rem;';
         $('#results')[0].style = 'display: none';
 
-        let url = `/api/v1/websites_data/search?domain=${$('#domain')[0].value}`;
-
-        $.get({
+        let url = `/api/v1/websites_data/search/form`;
+        debugger;
+        $.ajax({
             url: url,
+            type: 'post',
+            dataType: 'json',
+            data: JSON.stringify({
+                userName: $('#userName')[0].value || '',
+                userEmail: $('#userEmail')[0].value || '',
+                domain: $('#domain')[0].value || '',
+                queryLive: true,
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            },
             processData: false,
             contentType: false,
             success: (data) => {
                 console.log(data);
                 writeResults(data);
             }
-        })
-            .fail(() => {
-                console.log('Falling back to live query.');
-                $.get({
-                    url: url + '&live=true',
-                    processData: false,
-                    contentType: false,
-                    success: (data) => {
-                        console.log(data);
-                        writeResults(data);
-                    }
-                })
-            });
+        });
     });
 }
 
@@ -45,7 +44,7 @@ function writeResults(results) {
 
     if (!results.length) {
         const messageEl = document.createElement('p');
-        messageEl.innerHTML = '<strong>No results found for given domain.</strong>';
+        messageEl.innerHTML = '<strong>No results found for domain, try enabling live query!</strong>';
         resultsContainer.appendChild(messageEl);
         resultsContainer.style = 'display: block; width: 40%; margin-top: 5vh; margin-left: 30.5%; color: red;';
         $('#resultsTable')[0].style = 'display: none';

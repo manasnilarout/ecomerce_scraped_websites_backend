@@ -4,4 +4,6 @@ export default {
     TEMPLATES_PATH: 'templates',
     DOUBLE_DOTS: '..',
     WEBSITE_DATA_HTML_TEMPLATE: 'website.data',
+    CE_BASE_URL: 'https://snapshot.cloud-elements.com/elements/api-v2',
+    CE_SHEET_NAME: 'details',
 };
