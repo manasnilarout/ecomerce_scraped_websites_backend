@@ -129,7 +129,8 @@ export class WebSitesDataService {
         }
     }
 
-    public async search({ domain, companyId }, isLiveQuery: boolean = false): Promise<WebsitesData[]> {
+    public async search({ domain, companyId }: { domain: string, companyId: string }, isLiveQuery: boolean = false)
+        : Promise<WebsitesData[]> {
         try {
             this.logger.log(`Attempting to search with "${companyId || domain}" in DB`);
             if (companyId) {
@@ -163,7 +164,7 @@ export class WebSitesDataService {
             if (err instanceof HttpException) {
                 throw err;
             }
-            throw new InternalServerErrorException('Something went wrong while fetching data for record with given details.');
+            throw new InternalServerErrorException('Something went wrong while fetching data for record with given details.', err);
         }
     }
 

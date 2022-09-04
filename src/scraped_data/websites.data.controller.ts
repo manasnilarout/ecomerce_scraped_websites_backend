@@ -1,11 +1,16 @@
-import { Controller, Get, Param, Query } from "@nestjs/common";
+import { Controller, Get, Header, Param, Query } from "@nestjs/common";
 
 import { WebSitesDataService } from "./websites.data.service";
 import { WebsitesData } from "./websites.data.entity";
+import config from "../config";
+import { RendererUtil } from "../utils/template.render.util";
 
 @Controller('api/v1/websites_data')
 export class WebSitesDataController {
-    constructor(private websitesDataService: WebSitesDataService) { }
+    private renderer: RendererUtil;
+    constructor(private websitesDataService: WebSitesDataService) {
+        this.renderer = new RendererUtil();
+    }
 
     @Get()
     async findAll(
@@ -21,8 +26,31 @@ export class WebSitesDataController {
         @Query('domain') domain: string,
         @Query('companyId') companyId: string,
         @Query('live') live: boolean,
-    ): Promise<WebsitesData[]> {
-        return await this.websitesDataService.search({ domain, companyId }, live);
+        @Query('htmlResponse') htmlResponse: boolean,
+    ): Promise<WebsitesData[] | void | any> {
+        const jsonResponse = await this.websitesDataService.search({ domain, companyId }, live);
+
+        if (htmlResponse) {
+            return this.renderer.renderTemplate(
+                config.WEBSITE_DATA_HTML_TEMPLATE,
+                { domain, entries: Object.entries(jsonResponse[0]) }
+            );
+        }
+
+        return jsonResponse;
+    }
+
+    @Get('search/page')
+    @Header('Content-Type', 'text/html')
+    public async searchPage(
+        @Query('domain') domain: string,
+    ): Promise<WebsitesData[] | void | any> {
+        const jsonResponse = await this.websitesDataService.search({ domain, companyId: undefined }, true);
+
+        return this.renderer.renderTemplate(
+            config.WEBSITE_DATA_HTML_TEMPLATE,
+            { domain, entries: Object.entries(jsonResponse[0]) }
+        );
     }
 
     @Get('search/live')
