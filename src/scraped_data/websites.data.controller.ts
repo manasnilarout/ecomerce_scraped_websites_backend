@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Header, Param, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Header, Logger, Param, Post, Query } from "@nestjs/common";
 
 import { WebSitesDataService } from "./websites.data.service";
 import { WebsitesData } from "./websites.data.entity";
@@ -8,6 +8,8 @@ import { RendererUtil } from "../utils/template.render.util";
 @Controller('api/v1/websites_data')
 export class WebSitesDataController {
     private renderer: RendererUtil;
+    private readonly logger = new Logger(WebSitesDataService.name);
+
     constructor(private websitesDataService: WebSitesDataService) {
         this.renderer = new RendererUtil();
     }
@@ -45,12 +47,20 @@ export class WebSitesDataController {
     public async searchPage(
         @Query('domain') domain: string,
     ): Promise<WebsitesData[] | void | any> {
-        const jsonResponse = await this.websitesDataService.search({ domain, companyId: undefined }, true);
+        try {
+            const jsonResponse = await this.websitesDataService.search({ domain, companyId: undefined }, true);
 
-        return this.renderer.renderTemplate(
-            config.WEBSITE_DATA_HTML_TEMPLATE,
-            { domain, entries: Object.entries(jsonResponse[0]) }
-        );
+            return this.renderer.renderTemplate(
+                config.WEBSITE_DATA_HTML_TEMPLATE,
+                { domain, entries: Object.entries(jsonResponse[0]) }
+            );
+        } catch (err) {
+            this.logger.error('Hmm, something wrong with search/page.', err);
+            return this.renderer.renderTemplate(
+                config.WEBSITE_DATA_ERROR_HTML_TEMPLATE,
+                {}
+            );
+        }
     }
 
     @Get('search/live')
