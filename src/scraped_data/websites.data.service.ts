@@ -51,10 +51,22 @@ export class WebSitesDataService {
         }
     }
 
+    private sanitizeUrl(domain: string): string {
+        if (!domain.includes('http')) {
+            domain = `https://${domain}`;
+        }
+
+        if (!domain.includes('www')) {
+            domain = domain.replace(/(http(s)?:\/\/)(.+)/g, '$1www.$3');
+        }
+
+        return domain;
+    }
+
     private async queryFromImport(domain: string): Promise<WebsitesData> {
-        this.logger.log(`Attempting to scrape data from import for "${domain}"`);
+        this.logger.log(`Attempting to scrape data from import for "${this.sanitizeUrl(domain)}"`);
         const response = await this.httpService.get(
-            `https://extraction.import.io/query/extractor/${process.env.IMPORT_IO_EXTRACTOR_ID}?_apikey=${process.env.IMPORT_IO_API_KEY}&url=${encodeURIComponent(domain)}`
+            `https://extraction.import.io/query/extractor/${process.env.IMPORT_IO_EXTRACTOR_ID}?_apikey=${process.env.IMPORT_IO_API_KEY}&url=${encodeURIComponent(this.sanitizeUrl(domain))}`
         ).toPromise();
 
         if (response) {
@@ -127,7 +139,7 @@ export class WebSitesDataService {
             if (err instanceof HttpException) {
                 throw err;
             }
-            throw new InternalServerErrorException('Something went wrong while trying get data from import.');
+            throw new InternalServerErrorException('Something went wrong while trying get data from import.', err);
         }
     }
 

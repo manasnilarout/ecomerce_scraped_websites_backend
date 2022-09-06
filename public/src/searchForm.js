@@ -7,7 +7,7 @@ function main() {
         $('#results')[0].style = 'display: none';
 
         let url = `/api/v1/websites_data/search/form`;
-        debugger;
+
         $.ajax({
             url: url,
             type: 'post',
@@ -52,6 +52,7 @@ function writeResults(results) {
     }
 
     const resultTableElement = document.querySelector('#resultsTable');
+    resultTableElement.innerHTML = '';
 
     Object.keys(results[0]).forEach(k => {
         const row = document.createElement('tr');
