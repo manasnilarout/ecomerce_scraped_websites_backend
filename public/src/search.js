@@ -53,6 +53,7 @@ function writeResults(results) {
     }
 
     const resultTableElement = document.querySelector('#resultsTable');
+    resultTableElement.innerHTML = '';
 
     Object.keys(results[0]).forEach(k => {
         const row = document.createElement('tr');

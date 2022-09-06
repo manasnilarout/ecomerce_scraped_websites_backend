@@ -161,6 +161,7 @@ export class WebSitesDataService {
                 const result = await this.webSitesDataRepository
                     .createQueryBuilder('websiteData')
                     .where('websiteData.uri like :domain', { domain: `%${domain}%` })
+                    .orderBy('websiteData.dateScraped', 'DESC')
                     .getMany();
 
                 if (!result || !result.length) {
