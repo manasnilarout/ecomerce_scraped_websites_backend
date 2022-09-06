@@ -172,7 +172,7 @@ export class WebSitesDataService {
                     throw new NotFoundException(`No website record found with domain -> ${domain}`);
                 }
 
-                return result;
+                return result.map(this.processData);
             }
         } catch (err) {
             this.logger.error('Hmm, what happened here with the search!', err);
@@ -187,7 +187,14 @@ export class WebSitesDataService {
         const tempwebsiteDataObj = JSON.parse(JSON.stringify(websiteData))
 
         if (!tempwebsiteDataObj.applicationLdJson) {
+            delete tempwebsiteDataObj.applicationLdJson;
             tempwebsiteDataObj.applicationLdJsonPresence = false;
+        }
+
+        if (websiteData.divClassMain) {
+            delete tempwebsiteDataObj.divClassMain;
+            delete tempwebsiteDataObj.divIdMain;
+            tempwebsiteDataObj.divClassMainIsPopulated = true;
         }
 
         if (tempwebsiteDataObj.SSPAppContext === 'YES') {
