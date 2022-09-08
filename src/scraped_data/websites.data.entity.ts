@@ -53,6 +53,9 @@ export class WebsitesData {
     @Column({ name: 'got_response_from_pre_render' })
     public gotResponseFromPreRender: string;
 
+    @Column({ name: 'got_response_from_pre_render_time' })
+    public gotResponseFromPreRenderTime: string;
+
     @Column({ name: 'governance' })
     public governance: string;
 
