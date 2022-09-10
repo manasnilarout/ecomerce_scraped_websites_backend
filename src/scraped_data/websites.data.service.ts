@@ -11,6 +11,7 @@ import config from '../config';
 @Injectable()
 export class WebSitesDataService {
     private readonly logger = new Logger(WebSitesDataService.name);
+    private static avgCalculatableFields: string[] = ['perfTimingSqlTime', 'gotResponseFromPreRenderTime'];
 
     constructor(
         @InjectRepository(WebsitesData)
@@ -41,7 +42,7 @@ export class WebSitesDataService {
                 throw new NotFoundException(`No website record found with ID -> ${id}`);
             }
 
-            return this.processData(result);
+            return await this.processData(result);
         } catch (err) {
             this.logger.error('Hmm, what happened here with get buy ID!', err);
             if (err instanceof HttpException) {
@@ -109,7 +110,7 @@ export class WebSitesDataService {
             websiteRawRecord.source = 'External';
             websiteRawRecord.dateScraped = new Date().toISOString().split('T')[0];
 
-            return this.processData(await this.webSitesDataRepository.save(websiteRawRecord));
+            return await this.processData(await this.webSitesDataRepository.save(websiteRawRecord));
         }
 
         throw new InternalServerErrorException('Something went wrong while scraping data from import.');
@@ -172,7 +173,7 @@ export class WebSitesDataService {
                     throw new NotFoundException(`No website record found with domain -> ${domain}`);
                 }
 
-                return result.map(this.processData);
+                return Promise.all(result.map(async r => await this.processData(r)));
             }
         } catch (err) {
             this.logger.error('Hmm, what happened here with the search!', err);
@@ -183,7 +184,7 @@ export class WebSitesDataService {
         }
     }
 
-    private processData(websiteData: WebsitesData): WebsitesData {
+    private async processData(websiteData: WebsitesData): Promise<WebsitesData> {
         const tempwebsiteDataObj = JSON.parse(JSON.stringify(websiteData))
 
         if (!tempwebsiteDataObj.applicationLdJson) {
@@ -197,12 +198,27 @@ export class WebSitesDataService {
             tempwebsiteDataObj.divClassMainIsPopulated = true;
         }
 
-        if (tempwebsiteDataObj.SSPAppContext === 'YES') {
+        if (tempwebsiteDataObj.SSPAppContext && tempwebsiteDataObj.SSPAppContext.toLowerCase() === 'yes') {
             tempwebsiteDataObj.SSPAppContextStr = '85% of SCA Site have this ON.'
         }
 
-        if (tempwebsiteDataObj.isCnameMapped === 'No') {
+        if (tempwebsiteDataObj.isCnameMapped && tempwebsiteDataObj.isCnameMapped.toLowerCase() === 'no') {
             tempwebsiteDataObj.isCnameMappedStr = `CNAME is not correctly mapped and it fails with url: ${tempwebsiteDataObj.cNameTestUrl}`
+        }
+
+        this.logger.debug(`Pulling average values for applicable fields -> ${WebSitesDataService.avgCalculatableFields.join(',')}`);
+
+        for (const field of WebSitesDataService.avgCalculatableFields) {
+            const averageVal = await this.getAverageValue(field);
+            tempwebsiteDataObj[`${field}Average`] = averageVal.average;
+
+            if (tempwebsiteDataObj.hasOwnProperty(field) && tempwebsiteDataObj[field]) {
+                if (Number(tempwebsiteDataObj[field]) > Number(averageVal.average)) {
+                    tempwebsiteDataObj[`${field}IsAboveAverage`] = 'Yes'
+                } else {
+                    tempwebsiteDataObj[`${field}IsAboveAverage`] = 'No'
+                }
+            }
         }
 
         return tempwebsiteDataObj;
@@ -219,6 +235,13 @@ export class WebSitesDataService {
             }
             throw new InternalServerErrorException('Something went wrong while fetching data for record with given details.', err);
         }
+    }
+
+    private async getAverageValue(fieldName: string): Promise<any> {
+        const tableAlia = 'webSiteData';
+        return await this.webSitesDataRepository.createQueryBuilder(tableAlia)
+            .select(`AVG(${tableAlia}.${fieldName})`, 'average')
+            .getRawOne();
     }
 
     private async storeSearchDetailsInSheet(requestBody: SearchWebsiteRequest): Promise<void> {

@@ -8,7 +8,7 @@ import { RendererUtil } from "../utils/template.render.util";
 @Controller('api/v1/websites_data')
 export class WebSitesDataController {
     private renderer: RendererUtil;
-    private readonly logger = new Logger(WebSitesDataService.name);
+    private readonly logger = new Logger(WebSitesDataController.name);
 
     constructor(private websitesDataService: WebSitesDataService) {
         this.renderer = new RendererUtil();
