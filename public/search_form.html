@@ -8,29 +8,42 @@
     <title>Search SuiteCommerce Domain</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/searchForm.css" />
+    <link rel="stylesheet" id="google-fonts-1-css" href="https://fonts.googleapis.com/css?family=Roboto%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic&amp;display=auto&amp;ver=6.0.2" media="all">
 </head>
 
 <body>
-    <form class="md-form border border-dark p-5 file-uploader" id="form">
+    <header>
+        <a id="logo"  href="https://unlockcommerce.co">
+            <img width="200px" height="100px" src="https://unlockcommerce.co/wp-content/uploads/2020/04/UC-White-Logo-1.png" class="attachment-full size-full" alt="" loading="lazy" srcset="https://unlockcommerce.co/wp-content/uploads/2020/04/UC-White-Logo-1.png 350w, https://unlockcommerce.co/wp-content/uploads/2020/04/UC-White-Logo-1-300x86.png 300w" sizes="(max-width: 350px) 100vw, 350px">
+        </a>
+    </header>
+    <div class="elementor-background-overlay"></div>
+    <div class="text-content">
+        <h1>Find more!</h1>
+        <br>
+        <h3>Search for <strong>SuiteCommerce</strong> website using the below form</h3>
+        <h3>to understand more about it's details.</h3>
+    </div>
+    <form class="md-form border p-5 file-uploader" id="form">
         <div class="form-group">
             <label for="userEmail">Email</label>
             <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp"
-                placeholder="Please enter email">
+                placeholder="Please enter email" required>
             <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
         </div>
         <div class="form-group">
             <label for="userName">Name</label>
-            <input type="text" class="form-control" id="userName" placeholder="Name">
+            <input type="text" class="form-control" id="userName" placeholder="Name" required>
         </div>
         <div class="form-group">
             <label for="domain">Domain</label>
-            <input type="text" class="form-control" id="domain" placeholder="SuiteCommerce domain">
+            <input type="text" class="form-control" id="domain" placeholder="SuiteCommerce domain URL" required>
         </div>
         <!-- <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="isLiveQuery">
             <label class="form-check-label" for="isLiveQuery">Is live query?</label>
         </div> -->
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" id="searchButton" class="btn btn-danger">Submit</button>
     </form>
 
     <div id="loader" class="spinner-grow" style="display: none;" role="status">

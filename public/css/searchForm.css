@@ -1,7 +1,18 @@
+body {
+    font-family: "Roboto", sans-serif !important;
+}
+
 #form {
     width: 40%;
     margin-top: 5vh;
     margin-left: 30%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#form label:after {
+    content: " *";
+    color: red;
+    font-weight: 100;
 }
 
 #results {
@@ -10,9 +21,46 @@
     margin-left: 17%;
 }
 
+.elementor-background-overlay {
+    background-image: url("https://unlockcommerce.co/wp-content/uploads/2022/08/Frame-22.svg");
+    background-repeat: no-repeat;
+    background-size: 12% auto;
+    opacity: 0.5;
+    height: 100%;
+    width: 100%;
+    left: 88%;
+    position: absolute;
+}
+
 #loader {
     margin-left: 48.5%;
     margin-top: 5vh;
+}
+
+header {
+    background-color: #2C2C2C;
+}
+
+#logo {
+    margin-left: 3%;
+}
+
+#logo>img {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#searchButton {
+    margin-left: 40%;
+}
+
+.text-content {
+    margin-top: 5vh;
+    text-align: center;
+}
+
+.text-content strong {
+    color: red;
 }
 
 @media only screen and (max-width: 600px) {
