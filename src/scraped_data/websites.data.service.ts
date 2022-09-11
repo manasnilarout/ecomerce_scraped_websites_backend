@@ -120,12 +120,13 @@ export class WebSitesDataService {
         return (arr && arr[0]?.text) || null;
     }
 
-    public async getDataFromImport(domain: string, skipRecordCheck: boolean = false): Promise<WebsitesData[]> {
+    public async getDataFromImport(domain: string, skipRecordCheck: boolean = false, limit: number = 1): Promise<WebsitesData[]> {
         try {
             if (!skipRecordCheck) {
                 const existingRecords = await this.webSitesDataRepository
                     .createQueryBuilder('websiteData')
                     .where('websiteData.uri like :domain', { domain: `%${domain}%` })
+                    .limit(limit)
                     .getMany();
 
                 if (existingRecords && existingRecords.length) {
@@ -144,8 +145,11 @@ export class WebSitesDataService {
         }
     }
 
-    public async search({ domain, companyId }: { domain: string, companyId?: string }, isLiveQuery: boolean = false)
-        : Promise<WebsitesData[]> {
+    public async search(
+        { domain, companyId }: { domain: string, companyId?: string },
+        isLiveQuery: boolean = false,
+        limit: number = 1
+    ): Promise<WebsitesData[]> {
         try {
             this.logger.log(`Attempting to search with "${companyId || domain}" in DB`);
             if (companyId) {
@@ -163,6 +167,7 @@ export class WebSitesDataService {
                     .createQueryBuilder('websiteData')
                     .where('websiteData.uri like :domain', { domain: `%${domain}%` })
                     .orderBy('websiteData.dateScraped', 'DESC')
+                    .limit(limit)
                     .getMany();
 
                 if (!result || !result.length) {

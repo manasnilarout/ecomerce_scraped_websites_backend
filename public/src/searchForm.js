@@ -2,6 +2,17 @@ function main() {
     $('#form').submit(function (e) {
         e.preventDefault();
 
+        const $emailHelpContainer = $('#emailHelp')[0];
+        const userEmail = $('#userEmail')[0].value
+        const unSupportedEmailDomains = ['gmail', 'yahoo', 'hotmail', 'outlook'];
+
+        if (!isEmail(userEmail) || !!unSupportedEmailDomains.find(d => userEmail.includes(d))) {
+            $emailHelpContainer.innerText = 'Invalid/Unsupported email.';
+            $emailHelpContainer.style = 'color: red !important';
+            return;
+        }
+
+        $emailHelpContainer.innerHTML = '';
         const loader = $('#loader')[0];
         loader.style = 'display: block; width: 4rem; height: 4rem;';
         $('#results')[0].style = 'display: none';
@@ -14,7 +25,7 @@ function main() {
             dataType: 'json',
             data: JSON.stringify({
                 userName: $('#userName')[0].value || '',
-                userEmail: $('#userEmail')[0].value || '',
+                userEmail,
                 domain: $('#domain')[0].value || '',
                 queryLive: true,
             }),
@@ -29,7 +40,12 @@ function main() {
             }
         });
     });
-}
+};
+
+function isEmail(email) {
+    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    return regex.test(email);
+};
 
 const getTitleCaseFromCamelCase = (t) => {
     const result = t.replace(/([A-Z])/g, " $1");
@@ -82,6 +98,6 @@ function writeResults(results) {
     });
 
     resultsContainer.style = 'display: block';
-}
+};
 
 main();
