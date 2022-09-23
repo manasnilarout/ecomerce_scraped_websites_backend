@@ -115,4 +115,31 @@ export class WebsitesData {
 
     @Column({ name: 'is_sitemap_link_functional' })
     public isSitemapLinkFunctional: string;
+
+    @Column({ name: 'div_id_footer_tag' })
+    public divIdFooterTag: string;
+
+    @Column({ name: 'sitemap_origin' })
+    public sitemapOrigin: string;
+    
+    @Column({ name: 'no_index_no_follow_tags' })
+    public noIndexNoFollowTags: string;
+
+    @Column({ name: 'robots_page_content' })
+    public robotsPageContent: string;
+
+    @Column({ name: 'is_google_analytics_loaded' })
+    public isGoogleAnalyticsLoaded: string;
+
+    @Column({ name: 'is_applicatin_ld_json_present' })
+    public isApplicationLdJsonPresent: string;
+
+    @Column({ name: 'schema_type' })
+    public schemaType: string;
+
+    @Column({ name: 'schema_markup_present' })
+    public schemaMarkupPresent: string;
+
+    @Column({ name: 'is_meta_description_present' })
+    public isMetaDescriptionPresent: string;
 }
