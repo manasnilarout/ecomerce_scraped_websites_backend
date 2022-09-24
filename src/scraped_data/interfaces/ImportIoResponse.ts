@@ -41,7 +41,23 @@ export interface ImportIoReponse {
     consoleContent?: (GroupEntityField)[] | null;
     isCNameProperlyMapped?: (GroupEntityField)[] | null;
     cNameTestWithUrl?: (GroupEntityField)[] | null;
+    consoleErrStringContent?: (GroupEntityField)[] | null;
     isHttpS?: (GroupEntityField)[] | null;
+    gotResponseFromPrerenderTime?: (GroupEntityField)[] | null;
+    divIdFooterTag?: (GroupEntityField)[] | null;
+    noIndexNoFollowTags?: (GroupEntityField)[] | null;
+    sitemapOrigin?: (GroupEntityField)[] | null;
+    robotsPageContent?: (GroupEntityField)[] | null;
+    isGoogleAnalyticsLoaded?: (GroupEntityField)[] | null;
+    isApplicationLdJsonTagPresent?: (GroupEntityField)[] | null;
+    schemaType?: (GroupEntityField)[] | null;
+    schemaMarkupPresent?: (GroupEntityField)[] | null;
+    isMetaDescriptionPresent?: (GroupEntityField)[] | null;
+    isSiteMapLinkPresentInRobotsPage?: (GroupEntityField)[] | null;
+    isRobotsPagePresent?: (GroupEntityField)[] | null;
+    sitemapLink?: (GroupEntityField)[] | null;
+    isSitemapLinkFunctional?: (GroupEntityField)[] | null;
+    'perfTiming:sqltime'?: (GroupEntityField)[] | null;
   }
   export interface GroupEntityField {
     text: string;

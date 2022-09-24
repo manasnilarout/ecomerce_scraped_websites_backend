@@ -7,6 +7,7 @@ import { WebsitesData } from './websites.data.entity';
 import { ExtractorData, GroupEntity, GroupEntityField, ImportIoReponse } from './interfaces/ImportIoResponse';
 import { SearchWebsiteRequest } from './interfaces/SearchWebsiteRequest';
 import config from '../config';
+import { FieldDetails } from './interfaces/FieldDetails';
 
 @Injectable()
 export class WebSitesDataService {
@@ -104,7 +105,21 @@ export class WebSitesDataService {
             websiteRawRecord.governance = this.getDataFromImportGroupFieldArray(pageData.Governance);
             websiteRawRecord.isCnameMapped = this.getDataFromImportGroupFieldArray(pageData.isCNameProperlyMapped);
             websiteRawRecord.cNameTestUrl = this.getDataFromImportGroupFieldArray(pageData.cNameTestWithUrl);
-            websiteRawRecord.consoleContent = this.getDataFromImportGroupFieldArray(pageData.consoleContent);
+            websiteRawRecord.consoleContent = this.getDataFromImportGroupFieldArray(pageData.consoleErrStringContent);
+            websiteRawRecord.gotResponseFromPreRenderTime = this.getDataFromImportGroupFieldArray(pageData.gotResponseFromPrerenderTime);
+            websiteRawRecord.divIdFooterTag = this.getDataFromImportGroupFieldArray(pageData.divIdFooterTag);
+            websiteRawRecord.noIndexNoFollowTags = this.getDataFromImportGroupFieldArray(pageData.noIndexNoFollowTags);
+            websiteRawRecord.sitemapOrigin = this.getDataFromImportGroupFieldArray(pageData.sitemapOrigin);
+            websiteRawRecord.robotsPageContent = this.getDataFromImportGroupFieldArray(pageData.robotsPageContent);
+            websiteRawRecord.isGoogleAnalyticsLoaded = this.getDataFromImportGroupFieldArray(pageData.isGoogleAnalyticsLoaded);
+            websiteRawRecord.isApplicationLdJsonPresent = this.getDataFromImportGroupFieldArray(pageData.isApplicationLdJsonTagPresent);
+            websiteRawRecord.schemaType = this.getDataFromImportGroupFieldArray(pageData.schemaType);
+            websiteRawRecord.schemaMarkupPresent = this.getDataFromImportGroupFieldArray(pageData.schemaMarkupPresent);
+            websiteRawRecord.isMetaDescriptionPresent = this.getDataFromImportGroupFieldArray(pageData.isMetaDescriptionPresent);
+            websiteRawRecord.isSitemapLinkPresentInRobotsPage = this.getDataFromImportGroupFieldArray(pageData.isSiteMapLinkPresentInRobotsPage);
+            websiteRawRecord.isRobotsPagePresent = this.getDataFromImportGroupFieldArray(pageData.isRobotsPagePresent);
+            websiteRawRecord.sitemapLink = this.getDataFromImportGroupFieldArray(pageData.sitemapLink);
+            websiteRawRecord.isSitemapLinkFunctional = this.getDataFromImportGroupFieldArray(pageData.isSitemapLinkFunctional);
             websiteRawRecord.screenCapture = extractorData.data[0].screenCapture;
             websiteRawRecord.urlInput = extractorData.url;
             websiteRawRecord.source = 'External';
@@ -203,30 +218,90 @@ export class WebSitesDataService {
             tempwebsiteDataObj.divClassMainIsPopulated = true;
         }
 
-        if (tempwebsiteDataObj.SSPAppContext && tempwebsiteDataObj.SSPAppContext.toLowerCase() === 'yes') {
-            tempwebsiteDataObj.SSPAppContextStr = '85% of SCA Site have this ON.'
-        }
-
-        if (tempwebsiteDataObj.isCnameMapped && tempwebsiteDataObj.isCnameMapped.toLowerCase() === 'no') {
-            tempwebsiteDataObj.isCnameMappedStr = `CNAME is not correctly mapped and it fails with url: ${tempwebsiteDataObj.cNameTestUrl}`
-        }
-
-        this.logger.debug(`Pulling average values for applicable fields -> ${WebSitesDataService.avgCalculatableFields.join(',')}`);
-
-        for (const field of WebSitesDataService.avgCalculatableFields) {
-            const averageVal = await this.getAverageValue(field);
-            tempwebsiteDataObj[`${field}Average`] = averageVal.average;
-
-            if (tempwebsiteDataObj.hasOwnProperty(field) && tempwebsiteDataObj[field]) {
-                if (Number(tempwebsiteDataObj[field]) > Number(averageVal.average)) {
-                    tempwebsiteDataObj[`${field}IsAboveAverage`] = 'Yes'
-                } else {
-                    tempwebsiteDataObj[`${field}IsAboveAverage`] = 'No'
-                }
-            }
+        for (const key in tempwebsiteDataObj) {
+            tempwebsiteDataObj[key] = await this.processField(key, tempwebsiteDataObj[key]);
         }
 
         return tempwebsiteDataObj;
+    }
+
+    private async processField(fieldName: string, fieldValue: any): Promise<FieldDetails> {
+        const getAvgMsg = (avg, val): {msg: string, sentiment: string} => {
+            let msg = '';
+            let sentiment = config.BLUE_BG;
+            if (Number(val) > Number(avg)) {
+                msg = `Value is more than average ${avg}`;
+                sentiment = config.RED_BG;
+            } else {
+                msg = `Value is less than average ${avg}`;
+                sentiment = config.GREEN_BG;
+            }
+            return { msg, sentiment };
+        };
+
+        switch (fieldName) {
+            case 'perfTimingSqlTime':
+                const averageValuePerf = await this.getAverageValue(fieldName);
+                return {
+                    value: fieldValue,
+                    displayName: 'Performance Time',
+                    field: fieldName,
+                    averageValue: averageValuePerf.average,
+                    comment: getAvgMsg(averageValuePerf.average, fieldValue).msg,
+                    sentiment: getAvgMsg(averageValuePerf.average, fieldValue).sentiment,
+                }
+
+            case 'gotResponseFromPreRenderTime':
+                const averageValuePrerender = await this.getAverageValue(fieldName);
+                return {
+                    value: fieldValue,
+                    displayName: 'Response From Pre-render Time',
+                    field: fieldName,
+                    averageValue: averageValuePrerender.average,
+                    comment: getAvgMsg(averageValuePrerender.average, fieldValue).msg,
+                    sentiment: getAvgMsg(averageValuePrerender.average, fieldValue).sentiment,
+                }
+
+            case 'SSPAppContext':
+                return {
+                    value: fieldValue,
+                    displayName: fieldName,
+                    field: fieldName,
+                    comment: fieldValue.toLowerCase() === 'yes' ? null : '85% of SCA Site have this ON.',
+                    sentiment: fieldValue.toLowerCase() === 'yes' ? config.GREEN_BG : config.RED_BG,
+                }
+
+            case 'isCnameMapped':
+                return {
+                    value: fieldValue,
+                    displayName: 'Is CName Mapped',
+                    field: fieldName,
+                    comment: fieldValue.toLowerCase() === 'no' ? `CNAME is not correctly mapped` : null,
+                    sentiment: fieldValue.toLowerCase() === 'no' ? config.RED_BG : config.GREEN_BG,
+                }
+
+            case 'consoleContent':
+                return {
+                    value: fieldValue,
+                    displayName: 'Console Errors',
+                    field: fieldName,
+                    comment: fieldValue ? 'There are errors while rendering the webpage.' : null,
+                    sentiment: fieldValue ? config.RED_BG : config.GREEN_BG,
+                }
+
+            default:
+                return {
+                    value: fieldValue,
+                    displayName: this.getTitleCaseFromCamelCase(fieldName),
+                    field: fieldName,
+                    sentiment: config.BLUE_BG,
+                };
+        }
+    }
+
+    private getTitleCaseFromCamelCase(fieldName: string): string {
+        const result = fieldName.replace(/([A-Z])/g, " $1");
+        return result.charAt(0).toUpperCase() + result.slice(1);
     }
 
     public async searchForDomainAndStoreUserDetails(requestBody: SearchWebsiteRequest): Promise<WebsitesData[]> {
@@ -243,9 +318,10 @@ export class WebSitesDataService {
     }
 
     private async getAverageValue(fieldName: string): Promise<any> {
-        const tableAlia = 'webSiteData';
-        return await this.webSitesDataRepository.createQueryBuilder(tableAlia)
-            .select(`AVG(${tableAlia}.${fieldName})`, 'average')
+        const tableAlias = 'webSiteData';
+        this.logger.debug(`Pulling average value for -> ${fieldName}`);
+        return await this.webSitesDataRepository.createQueryBuilder(tableAlias)
+            .select(`AVG(${tableAlias}.${fieldName})`, 'average')
             .getRawOne();
     }
 

@@ -70,30 +70,44 @@ function writeResults(results) {
     const resultTableElement = document.querySelector('#resultsTable');
     resultTableElement.innerHTML = '';
 
-    Object.keys(results[0]).forEach(k => {
+    const fieldsToHide = ['backgroundRequests', 'perfTiming', 'searchRequestDetails'];
+
+    Object.values(results[0]).forEach(k => {
+        if (fieldsToHide.includes(k.field)) {
+            return;
+        }
+
         const row = document.createElement('tr');
         const d1 = document.createElement('td');
         const d2 = document.createElement('td');
+        const d3 = document.createElement('td');
 
-        d1.innerHTML = `<strong>${getTitleCaseFromCamelCase(k)}</strong>`;
+        d1.innerHTML = k.displayName;
+        d2.innerHTML = k.value;
+        d3.innerHTML = k.comment || '';
 
-        if (['divIdMain', 'divClassMain', 'consoleContent', 'backgroundRequests', 'cookies'].includes(k)) {
-            const ifr = document.createElement('iframe');
-            let html = '';
-            if (['backgroundRequests', 'cookies'].includes(k)) {
-                const requestLists = results[0][k] && results[0][k].split(';').map(r => `<li>${r.replace('[status', ' -> [status')}</li>`);
-                html = `<ul>${(requestLists || []).join('\n')}</ul>`;
-            } else {
-                html = results[0][k];
-            }
-            ifr.srcdoc = `<html><body>${html}</body></html>`;
-            d2.appendChild(ifr);
-        } else {
-            d2.innerText = results[0][k];
+        if (k.sentiment) {
+            row.style = `background-color: ${k.sentiment};`
         }
+
+        // if (['divIdMain', 'divClassMain', 'consoleContent', 'backgroundRequests', 'cookies'].includes(k)) {
+        //     const ifr = document.createElement('iframe');
+        //     let html = '';
+        //     if (['backgroundRequests', 'cookies'].includes(k)) {
+        //         const requestLists = results[0][k] && results[0][k].split(';').map(r => `<li>${r.replace('[status', ' -> [status')}</li>`);
+        //         html = `<ul>${(requestLists || []).join('\n')}</ul>`;
+        //     } else {
+        //         html = results[0][k];
+        //     }
+        //     ifr.srcdoc = `<html><body>${html}</body></html>`;
+        //     d2.appendChild(ifr);
+        // } else {
+        //     d2.innerText = results[0][k];
+        // }
 
         row.appendChild(d1);
         row.appendChild(d2);
+        row.appendChild(d3);
         resultTableElement.appendChild(row);
     });
 
