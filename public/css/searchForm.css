@@ -21,11 +21,12 @@ body {
 }
 
 table.fixed {
+    table-layout: fixed;
     width: 70%;
 }
 
 table.fixed td {
-    overflow: hidden;
+    overflow: scroll;
 }
 
 table.fixed td:nth-of-type(1) {
