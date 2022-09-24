@@ -68,12 +68,12 @@ function writeResults(results) {
     }
 
     const resultTableElement = document.querySelector('#resultsTable');
-    resultTableElement.innerHTML = '';
+    resultTableElement.innerHTML = '<thead><tr><th>Field</th><th>Value</th><th>Comment</th></tr></thead>';
 
     const fieldsToHide = ['backgroundRequests', 'perfTiming', 'searchRequestDetails'];
 
     Object.values(results[0]).forEach(k => {
-        if (fieldsToHide.includes(k.field)) {
+        if (fieldsToHide.includes(k.field) || !k.value) {
             return;
         }
 
@@ -83,7 +83,7 @@ function writeResults(results) {
         const d3 = document.createElement('td');
 
         d1.innerHTML = k.displayName;
-        d2.innerHTML = k.value;
+        d2.textContent = k.value;
         d3.innerHTML = k.comment || '';
 
         if (k.sentiment) {

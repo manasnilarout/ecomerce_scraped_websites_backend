@@ -294,7 +294,7 @@ export class WebSitesDataService {
                     value: fieldValue,
                     displayName: this.getTitleCaseFromCamelCase(fieldName),
                     field: fieldName,
-                    sentiment: config.BLUE_BG,
+                    sentiment: config.WHITE_BG,
                 };
         }
     }
