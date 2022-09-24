@@ -16,9 +16,28 @@ body {
 }
 
 #results {
-    width: 70%;
     margin-top: 5vh;
     margin-left: 15%;
+}
+
+table.fixed {
+    width: 70%;
+}
+
+table.fixed td {
+    overflow: hidden;
+}
+
+table.fixed td:nth-of-type(1) {
+    width: 20%;
+}
+
+table.fixed td:nth-of-type(2) {
+    width: 50%;
+}
+
+table.fixed td:nth-of-type(3) {
+    width: 30%;
 }
 
 .elementor-background-overlay {
