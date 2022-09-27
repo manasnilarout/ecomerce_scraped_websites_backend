@@ -5,4 +5,5 @@ export interface FieldDetails {
     comment?: string;
     averageValue?: number;
     sentiment?: string;
+    isLink?: boolean;
 }

@@ -11,4 +11,5 @@ export default {
     GREEN_BG: '#a8d6a8',
     BLUE_BG: '#b9b9e7',
     WHITE_BG: '#ffffff',
+    ORANGE_BG: '#f0af5e',
 };

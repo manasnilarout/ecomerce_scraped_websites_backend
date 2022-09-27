@@ -289,6 +289,14 @@ export class WebSitesDataService {
                     sentiment: fieldValue ? config.RED_BG : config.GREEN_BG,
                 }
 
+            case 'screenCapture':
+                return {
+                    value: fieldValue,
+                    displayName: 'Screen Capture',
+                    field: fieldName,
+                    isLink: true,
+                }
+
             default:
                 return {
                     value: fieldValue,

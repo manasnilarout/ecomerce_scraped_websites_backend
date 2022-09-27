@@ -83,7 +83,14 @@ function writeResults(results) {
         const d3 = document.createElement('td');
 
         d1.innerHTML = k.displayName;
-        d2.textContent = k.value;
+        if (k.field === 'screenCapture') {
+            const anc = document.createElement('a');
+            anc.href = k.value;
+            anc.textContent = 'Image Link';
+            d2.appendChild(anc);
+        } else {
+            d2.textContent = k.value;
+        }
         d3.innerHTML = k.comment || '';
 
         if (k.sentiment) {
