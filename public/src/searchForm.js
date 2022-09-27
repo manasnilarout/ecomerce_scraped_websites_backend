@@ -83,10 +83,10 @@ function writeResults(results) {
         const d3 = document.createElement('td');
 
         d1.innerHTML = k.displayName;
-        if (k.field === 'screenCapture') {
+        if (k.isLink) {
             const anc = document.createElement('a');
             anc.href = k.value;
-            anc.textContent = 'Image Link';
+            anc.textContent = 'Click Here!';
             d2.appendChild(anc);
         } else {
             d2.textContent = k.value;
