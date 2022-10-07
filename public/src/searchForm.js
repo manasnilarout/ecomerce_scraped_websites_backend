@@ -37,6 +37,11 @@ function main() {
             success: (data) => {
                 console.log(data);
                 writeResults(data);
+            },
+            fail: (e) => {
+                const loader = $('#loader')[0];
+                loader.style = 'display: none';
+                $('#errorContainer')[0].textContent = 'Something went wrong, please try again later';
             }
         });
     });

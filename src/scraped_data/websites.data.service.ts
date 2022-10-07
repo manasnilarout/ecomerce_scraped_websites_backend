@@ -105,7 +105,7 @@ export class WebSitesDataService {
             websiteRawRecord.canonicalUrl = this.getDataFromImportGroupFieldArray(pageData.canonical_url);
             websiteRawRecord.searchRequestDetails = this.getDataFromImportGroupFieldArray(pageData.searchRequest);
             websiteRawRecord.perfTiming = this.getDataFromImportGroupFieldArray(pageData.perfTiming);
-            websiteRawRecord.perfTimingSqlTime = this.getDataFromImportGroupFieldArray(pageData.perfTiming)?.replace(/sqltime:(\d+)/g, '$1');
+            websiteRawRecord.perfTimingSqlTime = this.getDataFromImportGroupFieldArray(pageData['perfTiming:sqltime']);
             websiteRawRecord.eCommerceType = this.getDataFromImportGroupFieldArray(pageData.eCommerceType);
             websiteRawRecord.isHttps = this.getDataFromImportGroupFieldArray(pageData.isHttpS);
             websiteRawRecord.gotResponseFromPreRender = this.getDataFromImportGroupFieldArray(pageData.gotResponseFromPrerender);
@@ -139,7 +139,8 @@ export class WebSitesDataService {
     }
 
     private getDataFromImportGroupFieldArray(arr: GroupEntityField[]): string {
-        return (arr && arr[0]?.text) || null;
+        if (arr && arr.length > 1) return arr.map(a => a.text).join(';').substring(0, 499);
+        return (arr && arr[0]?.text?.substring(0, 499)) || null;
     }
 
     public async getDataFromImport(domain: string, skipRecordCheck: boolean = false, limit: number = 1): Promise<WebsitesData[]> {
