@@ -27,7 +27,7 @@ function main() {
                 userName: $('#userName')[0].value || '',
                 userEmail,
                 domain: $('#domain')[0].value || '',
-                queryLive: true,
+                queryLive: $('#isLiveQuery').is(':checked'),
             }),
             headers: {
                 'Content-Type': 'application/json'

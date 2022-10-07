@@ -62,6 +62,13 @@ export class WebSitesDataService {
             domain = domain.replace(/(http(s)?:\/\/)(.+)/g, '$1www.$3');
         }
 
+        if (!domain.includes('?')) {
+            domain += `?seodebug=T&preview=${new Date().getTime()}`;
+        } else {
+            if (!domain.includes('seodebug')) domain += `&seodebug=T`;
+            if (!domain.includes('preview')) domain += `&preview=${new Date().getTime()}`;
+        }
+
         return domain;
     }
 
@@ -163,7 +170,8 @@ export class WebSitesDataService {
     public async search(
         { domain, companyId }: { domain: string, companyId?: string },
         isLiveQuery: boolean = false,
-        limit: number = 1
+        limit: number = 1,
+        isForceLiveQuery: boolean = false,
     ): Promise<WebsitesData[]> {
         try {
             this.logger.log(`Attempting to search with "${companyId || domain}" in DB`);
@@ -178,6 +186,10 @@ export class WebSitesDataService {
             }
 
             if (domain) {
+                if (isForceLiveQuery) {
+                    return await this.getDataFromImport(domain, true);
+                }
+
                 const result = await this.webSitesDataRepository
                     .createQueryBuilder('websiteData')
                     .where('websiteData.uri like :domain', { domain: `%${domain}%` })
@@ -226,7 +238,7 @@ export class WebSitesDataService {
     }
 
     private async processField(fieldName: string, fieldValue: any): Promise<FieldDetails> {
-        const getAvgMsg = (avg, val): {msg: string, sentiment: string} => {
+        const getAvgMsg = (avg, val): { msg: string, sentiment: string } => {
             let msg = '';
             let sentiment = config.BLUE_BG;
             if (Number(val) > Number(avg)) {
@@ -315,7 +327,7 @@ export class WebSitesDataService {
     public async searchForDomainAndStoreUserDetails(requestBody: SearchWebsiteRequest): Promise<WebsitesData[]> {
         try {
             await this.storeSearchDetailsInSheet(requestBody);
-            return await this.search({ domain: requestBody.domain }, true);
+            return await this.search({ domain: requestBody.domain }, false, config.DEFAULT_RECORDS_COUNT, requestBody.queryLive);
         } catch (err) {
             this.logger.error('Hmm, what happened here with the search!', err);
             if (err instanceof HttpException) {
