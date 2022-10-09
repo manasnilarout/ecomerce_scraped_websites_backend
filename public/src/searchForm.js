@@ -82,6 +82,10 @@ function writeResults(results) {
             return;
         }
 
+        if (k.hasOwnProperty('disableField') && k.disableField) {
+            return;
+        }
+
         const row = document.createElement('tr');
         const d1 = document.createElement('td');
         const d2 = document.createElement('td');
@@ -99,7 +103,16 @@ function writeResults(results) {
         d3.innerHTML = k.comment || '';
 
         if (k.sentiment) {
-            row.style = `background-color: ${k.sentiment};`
+            row.style = `background-color: ${k.sentiment};`;
+        }
+
+        if (k.helperText) {
+            const icn = document.createElement('i');
+            icn.setAttribute('class', 'fa fa-question-circle');
+            icn.title = k.helperText;
+            icn.style = 'margin-left: 2px;'
+            d1.appendChild(icn);
+            d1.title = k.helperText;
         }
 
         // if (['divIdMain', 'divClassMain', 'consoleContent', 'backgroundRequests', 'cookies'].includes(k)) {

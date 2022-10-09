@@ -121,7 +121,7 @@ export class WebsitesData {
 
     @Column({ name: 'sitemap_origin' })
     public sitemapOrigin: string;
-    
+
     @Column({ name: 'no_index_no_follow_tags' })
     public noIndexNoFollowTags: string;
 
@@ -142,4 +142,19 @@ export class WebsitesData {
 
     @Column({ name: 'is_meta_description_present' })
     public isMetaDescriptionPresent: string;
+
+    @Column({ name: 'got_response_from_pre_render_val_1' })
+    public gotResponseFromPrerenderAttemptOne: string;
+
+    @Column({ name: 'got_response_from_pre_render_val_2' })
+    public gotResponseFromPrerenderAttemptTwo: string;
+
+    @Column({ name: 'got_response_from_pre_render_val_3' })
+    public gotResponseFromPrerenderAttemptThree: string;
+
+    @Column({ name: 'got_response_from_pre_render_val_average' })
+    public gotResponseFromPrerenderAttemptsAverage: string;
+
+    @Column({ name: 'got_response_from_pre_render_val_alerts' })
+    public gotResponseFromPrerenderAttemptsAlertLevelValues: string;
 }

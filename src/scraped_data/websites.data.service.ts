@@ -218,7 +218,7 @@ export class WebSitesDataService {
     }
 
     private async processData(websiteData: WebsitesData): Promise<WebsitesData> {
-        const tempwebsiteDataObj = JSON.parse(JSON.stringify(websiteData))
+        const tempwebsiteDataObj = JSON.parse(JSON.stringify(websiteData));
 
         if (!tempwebsiteDataObj.applicationLdJson) {
             delete tempwebsiteDataObj.applicationLdJson;
@@ -302,6 +302,22 @@ export class WebSitesDataService {
                     sentiment: fieldValue ? config.RED_BG : config.GREEN_BG,
                 }
 
+            case 'title':
+                const badTitles = ['Welcome to the Store', 'Shopping', 'Page Not Found'];
+                let isBadTitle = false;
+                badTitles.forEach(c => {
+                    if (fieldValue.toLowerCase().includes(c.toLocaleLowerCase())) {
+                        isBadTitle = true;
+                    }
+                })
+                return {
+                    value: fieldValue,
+                    displayName: this.getTitleCaseFromCamelCase(fieldName),
+                    field: fieldName,
+                    comment: isBadTitle ? 'Title doesn\'t seem accurate, please update to something more understandable.' : null,
+                    sentiment: isBadTitle ? config.RED_BG : config.GREEN_BG,
+                }
+
             case 'screenCapture':
                 return {
                     value: fieldValue,
@@ -309,6 +325,59 @@ export class WebSitesDataService {
                     field: fieldName,
                     isLink: true,
                 }
+
+            case 'gotResponseFromPrerenderAttemptOne':
+                return {
+                    value: fieldValue,
+                    field: fieldName,
+                    disableField: true,
+                };
+
+            case 'gotResponseFromPrerenderAttemptTwo':
+                return {
+                    value: fieldValue,
+                    field: fieldName,
+                    disableField: true,
+                };
+
+            case 'gotResponseFromPrerenderAttemptThree':
+                return {
+                    value: fieldValue,
+                    field: fieldName,
+                    disableField: true,
+                };
+
+            case 'gotResponseFromPrerenderAttemptsAverage':
+                let comment = '';
+                let sentiment = config.GREEN_BG;
+
+                if (fieldValue > 5000 && fieldValue < 7000) {
+                    comment = 'One of the times(or more) used for the average was more than warning level, try to reduce this.'
+                    sentiment = config.ORANGE_BG;
+                } else if (fieldValue > 7000) {
+                    comment = 'One of the times(or more) used for the average was more than alert level, try to reduce this.'
+                    sentiment = config.RED_BG;
+                }
+
+                return {
+                    value: fieldValue,
+                    field: fieldName,
+                    displayName: 'Prerender response time average',
+                    helperText: 'From 3 back to back attempts',
+                    sentiment,
+                    comment,
+                };
+
+            case 'gotResponseFromPrerenderAttemptsAlertLevelValues':
+                return {
+                    value: fieldValue,
+                    field: fieldName,
+                    displayName: 'Prerender response alert level values',
+                    comment: 'This is not good, please try to reduce the prerender times',
+                    helperText: 'Collected alert level values from 3 back to back attempts',
+                    sentiment: config.RED_BG,
+                    disableField: fieldValue === '-',
+                };
 
             default:
                 return {
