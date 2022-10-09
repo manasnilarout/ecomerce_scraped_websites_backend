@@ -127,6 +127,11 @@ export class WebSitesDataService {
             websiteRawRecord.isRobotsPagePresent = this.getDataFromImportGroupFieldArray(pageData.isRobotsPagePresent);
             websiteRawRecord.sitemapLink = this.getDataFromImportGroupFieldArray(pageData.sitemapLink);
             websiteRawRecord.isSitemapLinkFunctional = this.getDataFromImportGroupFieldArray(pageData.isSitemapLinkFunctional);
+            websiteRawRecord.gotResponseFromPrerenderAttemptOne = this.getDataFromImportGroupFieldArray(pageData['gotResponseFromPrerenderAttempt-1']);
+            websiteRawRecord.gotResponseFromPrerenderAttemptTwo = this.getDataFromImportGroupFieldArray(pageData['gotResponseFromPrerenderAttempt-2']);
+            websiteRawRecord.gotResponseFromPrerenderAttemptThree = this.getDataFromImportGroupFieldArray(pageData['gotResponseFromPrerenderAttempt-3']);
+            websiteRawRecord.gotResponseFromPrerenderAttemptsAverage = this.getDataFromImportGroupFieldArray(pageData['gotResponseFromPrerenderAttempt-Average']);
+            websiteRawRecord.gotResponseFromPrerenderAttemptsAlertLevelValues = this.getDataFromImportGroupFieldArray(pageData['gotResponseFromPrerenderAttempt-AlertLevelValues']);
             websiteRawRecord.screenCapture = extractorData.data[0].screenCapture;
             websiteRawRecord.urlInput = extractorData.url;
             websiteRawRecord.source = 'External';
