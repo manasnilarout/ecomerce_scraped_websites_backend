@@ -384,6 +384,18 @@ export class WebSitesDataService {
                     disableField: fieldValue === '-',
                 };
 
+            case 'version':
+                const safeVersionYears = ['2020', '2021', '2022'];
+                const isSafeVersion = safeVersionYears.find(s => fieldValue.includes(s));
+                return {
+                    value: fieldValue,
+                    field: fieldName,
+                    displayName: 'Version',
+                    comment: isSafeVersion ? '' : 'We highly recommend an upgrade to the latest version of SuiteCommerce',
+                    helperText: 'SuiteCommerce version',
+                    sentiment: isSafeVersion ? config.GREEN_BG : config.RED_BG,
+                };
+
             default:
                 return {
                     value: fieldValue,
