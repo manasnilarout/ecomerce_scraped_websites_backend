@@ -63,6 +63,7 @@ export class WebSitesDataService {
         }
 
         if (!domain.includes('?')) {
+            domain = domain.replace(/\/$/, '');
             domain += `?seodebug=T&preview=${new Date().getTime()}`;
         } else {
             if (!domain.includes('seodebug')) domain += `&seodebug=T`;
